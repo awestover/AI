@@ -13,6 +13,10 @@
 	<script src="{{ url_for('static', filename='libs/three.min.js') }}"></script>
   <script>
 let camera, scene, renderer;
+let matrices = {};  // external rotation matricies
+let maxCt = 15;
+let dth = Math.PI/(2*(maxCt+1));
+let rotateIdxs;
 let geometries = [];
 let materials = [];
 let meshes = [];
@@ -22,6 +26,19 @@ let translates = [[-w/2, -w/2, +w/2], [-w/2, w/2, +w/2], [w/2, w/2, +w/2], [w/2,
                   [-w/2, -w/2, -w/2], [-w/2, w/2, -w/2], [w/2, w/2, -w/2], [w/2, -w/2, -w/2]];
 const COLORS = [0x4286f4, 0xdb2f04, 0x04db2f, 0xeff707, 0xf78307, 0xffffff];
 const ORIGIN = new THREE.Vector3(0,0,0);
+let rotationGoing = false;
+/*
+
+
+    |
+    |
+---------x
+    |
+    |
+    y
+
+  z is straight out of the screen
+*/
 
 init();
 animate();
@@ -39,7 +56,7 @@ function init() {
     meshes.push([]);
     for (let k = 0; k < dims[1]; k++)
     {
-      geometries[i].push(new THREE.BoxGeometry(0.1*w, 0.1*w, 0.1*w));
+      geometries[i].push(new THREE.BoxGeometry(0.95*w, 0.95*w, 0.95*w));
       for (let j = 0; j < geometries[i][k].faces.length/2; j++) {
         geometries[i][k].faces[2*j].color.setHex(COLORS[j]);
         geometries[i][k].faces[2*j+1].color.setHex(COLORS[j]);
@@ -55,6 +72,82 @@ function init() {
     }
   }
 
+  matrices['F'] = new THREE.Matrix4();
+  matrices['F'].set(
+    Math.cos(dth), -Math.sin(dth), 0, 0,
+    Math.sin(dth), Math.cos(dth), 0, 0,
+    0, 0, 1, 0,
+    0, 0, 0, 1
+  );
+  matrices['B'] = matrices['F'];
+
+  matrices['Fi'] = new THREE.Matrix4();
+  matrices['Fi'].set(
+    Math.cos(-dth), -Math.sin(-dth), 0, 0,
+    Math.sin(-dth), Math.cos(-dth), 0, 0,
+    0, 0, 1, 0,
+    0, 0, 0, 1
+  );
+  matrices['Bi'] = matrices['Fi'];
+
+  // this one is wrong
+  matrices['U'] = new THREE.Matrix4();
+  matrices['U'].set(
+    Math.cos(dth), 0, -Math.sin(dth), 0,
+    0, 1, 0, 0,
+    Math.sin(dth), 0, Math.cos(dth), 0,
+    0, 0, 0, 1
+  );
+  matrices['D'] = matrices['U'];
+
+  matrices['Ui'] = new THREE.Matrix4();
+  matrices['Ui'].set(
+    Math.cos(-dth), 0, -Math.sin(-dth), 0,
+    0, 1, 0, 0,
+    Math.sin(-dth), 0, Math.cos(-dth), 0,
+    0, 0, 0, 1
+  );
+  matrices['Di'] = matrices['Ui'];
+
+  matrices['R'] = new THREE.Matrix4();
+  matrices['R'].set(
+    1, 0, 0, 0,
+    0, Math.cos(-dth), -Math.sin(-dth), 0,
+    0, Math.sin(-dth), Math.cos(-dth), 0,
+    0, 0, 0, 1
+  );
+  matrices['L'] = matrices['R'];
+
+  matrices['Ri'] = new THREE.Matrix4();
+  matrices['Ri'].set(
+    1, 0, 0, 0,
+    0, Math.cos(dth), -Math.sin(dth), 0,
+    0, Math.sin(dth), Math.cos(dth), 0,
+    0, 0, 0, 1
+  );
+  matrices['Li'] = matrices['Ri'];
+
+
+  rotateIdxs = {
+    "R":  [[0,2],[0,3],[1,2],[1,3]],
+    "Ri": [[0,2],[0,3],[1,2],[1,3]],
+
+    "L":  [[0,0],[0,1],[1,0],[1,1]],
+    "Li": [[0,0],[0,1],[1,0],[1,1]],
+
+    "U":  [[0,1],[0,2],[1,1],[1,2]],
+    "Ui": [[0,1],[0,2],[1,1],[1,2]],
+
+    "D":  [[0,0],[0,3],[1,0],[1,3]],
+    "Di": [[0,0],[0,3],[1,0],[1,3]],
+
+    "F":  [[0,0],[0,1],[0,2],[0,3]],
+    "Fi": [[0,0],[0,1],[0,2],[0,3]],
+
+    "B":  [[1,1],[1,2],[1,2],[1,3]],
+    "Bi": [[1,1],[1,2],[1,2],[1,3]],
+  }
+
 
   renderer = new THREE.WebGLRenderer( { antialias: true } );
   renderer.setSize( window.innerWidth, window.innerHeight );
@@ -63,19 +156,38 @@ function init() {
 
 function animate() {
   requestAnimationFrame(animate);
-
-  for (let i = 0; i < dims[0]; i++)
-  {
-    for (let k = 0; k < dims[1]; k++)
-    {
-      meshes[i][k].rotateX(0.01);
-      meshes[i][k].rotateY(0.01);
-      meshes[i][k].rotateZ(0.01);
-    }
-  }
-
   renderer.render(scene, camera);
 }
+
+function maybeRotate(type, ct) {
+  if (!rotationGoing) {
+    rotation(type, ct);
+  }
+}
+
+function rotation(type, ct) {
+  rotationGoing = true;
+  if (ct > maxCt) {
+    rotationGoing = false;
+    return true;
+  }
+  let idxs = rotateIdxs[type];
+  for (let i in idxs) {
+    meshes[idxs[i][0]][idxs[i][1]].applyMatrix(matrices[type]);
+  }
+  setTimeout(rotation, 200, type, ct+1);
+}
+
+  </script>
+
+  <div id="buttons"></div>
+
+  <script>
+    let tmp = "";
+    for (let key in rotateIdxs) {
+      tmp += "<button onclick='maybeRotate(\""+key+"\",0);'>"+ key+"</button>"
+    }
+    document.getElementById('buttons').innerHTML= tmp;
   </script>
 
 </body>
