@@ -39,16 +39,18 @@ algs["The_double_sides(Website case 2)"] = algs["Fish_1"]+algs["Fish_1"]
 algs["(Website case 3)"] = algs["Fish_1"]+['U']+algs["Fish_1"]
 algs["(Webiste case 6)"] = algs["Fish_1"]+['Ui']+["Fish_2"]
 
+# "state name": [([faceIndex, [indexOnFace]], "COLOR", True/False (should it be this color or not this color)), other requirements]
 states = {
-    "Fish_1": [([1, [1,0]], "Y")]
+    "Fish_1": [([1, [1,0]], "Y", True)]
 }
 tmp = []
 for i in range(len(COLORS)):
-    tmp.append(([i, [0, 0]], COLORS[i]))
-    tmp.append(([i, [0, 1]], COLORS[i]))
-    tmp.append(([i, [1, 0]], COLORS[i]))
-    tmp.append(([i, [1, 1]], COLORS[i]))
+    tmp.append(([i, [0, 0]], COLORS[i], True))
+    tmp.append(([i, [0, 1]], COLORS[i], True))
+    tmp.append(([i, [1, 0]], COLORS[i], True))
+    tmp.append(([i, [1, 1]], COLORS[i], True))
 states["solved"] = tmp
+states['whiteFace'] = [([0, [0,0]], "W", False), etc]
 
 stateOrder = ["solved", "whiteFace", "Fish_1"]
 
@@ -65,7 +67,7 @@ def doFormula(oldcube, formula):
 
 def isState(cube, state):
     for req in state:
-        if cube[req[0][0]][req[0][1][0], req[0][1][1]] != req[1]:
+        if (cube[req[0][0]][req[0][1][0], req[0][1][1]] == req[1]) == req[2]:
             return False
     return True
 
