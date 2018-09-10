@@ -29,7 +29,7 @@
   <script>
 let camera, scene, renderer;
 let matrices = {};  // external rotation matricies
-let maxCt = 5;
+let maxCt = 10;
 let dth = Math.PI/(2*(maxCt+1));
 let rotateIdxs, reindexIdxs;
 let geometries = [];
@@ -91,23 +91,28 @@ function init() {
     }
   }
 
+  scene.rotateX(0.3);
+  scene.rotateY(0.5);
+  scene.rotateZ(0.3);
+
   matrices['F'] = new THREE.Matrix4();
   matrices['F'].set(
-    Math.cos(dth), -Math.sin(dth), 0, 0,
-    Math.sin(dth), Math.cos(dth), 0, 0,
-    0, 0, 1, 0,
-    0, 0, 0, 1
-  );
-  matrices['B'] = matrices['F'];
-
-  matrices['Fi'] = new THREE.Matrix4();
-  matrices['Fi'].set(
     Math.cos(-dth), -Math.sin(-dth), 0, 0,
     Math.sin(-dth), Math.cos(-dth), 0, 0,
     0, 0, 1, 0,
     0, 0, 0, 1
   );
-  matrices['Bi'] = matrices['Fi'];
+
+  matrices['Fi'] = new THREE.Matrix4();
+  matrices['Fi'].set(
+    Math.cos(dth), -Math.sin(dth), 0, 0,
+    Math.sin(dth), Math.cos(dth), 0, 0,
+    0, 0, 1, 0,
+    0, 0, 0, 1
+  );
+
+  matrices['B'] = matrices['Fi'];
+  matrices['Bi'] = matrices['F'];
 
   matrices['U'] = new THREE.Matrix4();
   matrices['U'].set(
@@ -116,7 +121,6 @@ function init() {
     Math.sin(dth), 0, Math.cos(dth), 0,
     0, 0, 0, 1
   );
-  matrices['D'] = matrices['U'];
 
   matrices['Ui'] = new THREE.Matrix4();
   matrices['Ui'].set(
@@ -125,7 +129,9 @@ function init() {
     Math.sin(-dth), 0, Math.cos(-dth), 0,
     0, 0, 0, 1
   );
-  matrices['Di'] = matrices['Ui'];
+
+  matrices['D'] = matrices['Ui'];
+  matrices['Di'] = matrices['U'];
 
   matrices['R'] = new THREE.Matrix4();
   matrices['R'].set(
@@ -134,7 +140,6 @@ function init() {
     0, Math.sin(-dth), Math.cos(-dth), 0,
     0, 0, 0, 1
   );
-  matrices['L'] = matrices['R'];
 
   matrices['Ri'] = new THREE.Matrix4();
   matrices['Ri'].set(
@@ -143,33 +148,24 @@ function init() {
     0, Math.sin(dth), Math.cos(dth), 0,
     0, 0, 0, 1
   );
-  matrices['Li'] = matrices['Ri'];
+
+  matrices['L'] = matrices['Ri'];
+  matrices['Li'] = matrices['R'];
 
 
   rotateIdxs = {
-    "R":  [[0,3],[0,2],[1,2],[1,3]],
-    "Ri": [[0,3],[0,2],[1,2],[1,3]],
-
-    "L":  [[0,0],[0,1],[1,1],[1,0]],
-    "Li": [[0,0],[0,1],[1,1],[1,0]],
-
-    "U":  [[0,1],[1,1],[1,2],[0,2]],
-    "Ui": [[0,1],[1,1],[1,2],[0,2]],
-
-    "D":  [[0,0],[1,0],[1,3],[0,3]],
-    "Di": [[0,0],[1,0],[1,3],[0,3]],
-
-    "F":  [[0,0],[0,1],[0,2],[0,3]],
-    "Fi": [[0,0],[0,1],[0,2],[0,3]],
-
-    "B":  [[1,0],[1,1],[1,2],[1,3]],
-    "Bi": [[1,0],[1,1],[1,2],[1,3]]
+    "R": [[0,3],[0,2],[1,2],[1,3]],
+    "L": [[0,0],[1,0],[1,1],[0,1]],
+    "U": [[0,1],[1,1],[1,2],[0,2]],
+    "D": [[0,3],[1,3],[1,0],[0,0]],
+    "F": [[0,0],[0,1],[0,2],[0,3]],
+    "B": [[1,3],[1,2],[1,1],[1,0]]
   }
 
   for (let key in rotateIdxs) {
-    if (key.indexOf('i')!=-1)
+    if (key.indexOf('i')==-1)
     {
-      rotateIdxs[key] = rotateIdxs[key].reverse();
+      rotateIdxs[key+"i"] = rotateIdxs[key].slice().reverse();
     }
   }
 
@@ -220,8 +216,32 @@ function rotation(type, ct) {
   for (let i in midxs) {
     meshes[midxs[i][0]][midxs[i][1]].applyMatrix(matrices[type]);
   }
-  setTimeout(rotation, 200, type, ct+1);
+  setTimeout(rotation, 50, type, ct+1);
 }
+
+document.addEventListener('keypress', (event) => {
+  const keyName = event.key.toLowerCase();
+  switch (keyName) {
+    case 'w':
+      scene.rotateX(-0.1);
+      break;
+    case 's':
+      scene.rotateX(0.1);
+      break;
+    case 'a':
+      scene.rotateY(-0.1);
+      break;
+    case 'd':
+      scene.rotateY(0.1);
+      break;
+    case 'q':
+      scene.rotateZ(-0.1);
+      break;
+    case 'e':
+      scene.rotateZ(0.1);
+      break;
+  }
+});
 
   </script>
 
