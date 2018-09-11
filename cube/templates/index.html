@@ -27,14 +27,5 @@
   <script src="{{ url_for('static', filename='display.js') }}"></script>
 
   <div id="buttons"></div>
-
-  <script>
-    let tmp = "";
-    for (let key in rotateIdxs) {
-      tmp += "<button class='btn btn-lg' onclick='maybeRotate(\""+key+"\",0);'>"+ key+"</button>"
-    }
-    document.getElementById('buttons').innerHTML= tmp;
-  </script>
-
 </body>
 </html>

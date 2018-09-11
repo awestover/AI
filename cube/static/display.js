@@ -16,8 +16,30 @@ let meshInds = [
 ];
 let translates = [[-w/2, -w/2, +w/2], [-w/2, w/2, +w/2], [w/2, w/2, +w/2], [w/2, -w/2, +w/2],
                   [-w/2, -w/2, -w/2], [-w/2, w/2, -w/2], [w/2, w/2, -w/2], [w/2, -w/2, -w/2]];
-const COLORS = [0x4286f4, 0xdb2f04, 0x04db2f, 0xeff707, 0xf78307, 0xffffff];
+const COLORS = ['G', 'Y', 'B', 'W', 'O', 'R'];
+const COLORWORDS = {
+  "G": 0x04db2f,
+  "Y": 0xeff707,
+  "B": 0x4286f4,
+  "W": 0xffffff,
+  "O": 0xf78307,
+  "R": 0xdb2f04,
+  "A": 0x000000
+}
 const ORIGIN = new THREE.Vector3(0,0,0);
+const faceIdxTransform = [5,2,4,3,0,1];
+/*
+their representation of a cube
+   5
+ 1 2 0
+   4
+   3
+mine:
+   0
+ 5 1 4
+   2
+   3
+*/
 let rotationGoing = false;
 /*
 
@@ -32,10 +54,12 @@ let rotationGoing = false;
   z is straight out of the screen
 */
 
-init();
-animate();
+$.get('/cubeData', function(colorData) {
+  init(JSON.parse(colorData));
+  animate();
+});
 
-function init() {
+function init(colorData) {
   camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 0.01, 10);
   camera.position.z = 1;
 
@@ -49,9 +73,11 @@ function init() {
     for (let k = 0; k < dims[1]; k++)
     {
       geometries[i].push(new THREE.BoxGeometry(0.95*w, 0.95*w, 0.95*w));
-      for (let j = 0; j < geometries[i][k].faces.length/2; j++) {
-        geometries[i][k].faces[2*j].color.setHex(COLORS[j]);
-        geometries[i][k].faces[2*j+1].color.setHex(COLORS[j]);
+      for (let j = 0; j < faceIdxTransform.length; j++) {
+        // each face has 2 triangles on it
+        let jp = faceIdxTransform[j];
+        geometries[i][k].faces[2*jp].color.setHex(COLORWORDS[colorData[i][k][j]]);
+        geometries[i][k].faces[2*jp+1].color.setHex(COLORWORDS[colorData[i][k][j]]);
       }
       materials[i].push(new THREE.MeshBasicMaterial( { color: 0xffffff, vertexColors: THREE.FaceColors } ));
 
@@ -64,9 +90,9 @@ function init() {
     }
   }
 
-  scene.rotateX(0.3);
-  scene.rotateY(0.5);
-  scene.rotateZ(0.3);
+  scene.rotateX(0.5);
+  scene.rotateY(0.1);
+  scene.rotateZ(0.1);
 
   matrices['F'] = new THREE.Matrix4();
   matrices['F'].set(
@@ -166,7 +192,7 @@ function getMeshIdxs(coordIdxs) {
   return meshIdxs;
 }
 
-function rotation(type, ct) {
+function rotation(type, ct, callback, params) {
   rotationGoing = true;
   if (ct > maxCt) {
     rotationGoing = false;
@@ -182,14 +208,23 @@ function rotation(type, ct) {
     {
       meshInds[idxs[(i+1)%n][0]][idxs[(i+1)%n][1]] = tmpIdxs[i];
     }
-
+    if (callback) {
+      callback(params);
+    }
     return true;
   }
   let midxs = getMeshIdxs(rotateIdxs[type]);
   for (let i in midxs) {
     meshes[midxs[i][0]][midxs[i][1]].applyMatrix(matrices[type]);
   }
-  setTimeout(rotation, 50, type, ct+1);
+  setTimeout(rotation, 50, type, ct+1, callback, params);
+}
+
+function rotationQueue(types) {
+  if (types.length > 0)
+  {
+    rotation(types[0], 0, rotationQueue, types.slice(1));
+  }
 }
 
 document.addEventListener('keypress', (event) => {
@@ -215,3 +250,11 @@ document.addEventListener('keypress', (event) => {
       break;
   }
 });
+
+setTimeout(function() {
+  let tmp = "";
+  for (let key in rotateIdxs) {
+    tmp += "<button class='btn btn-lg' onclick='maybeRotate(\""+key+"\",0);'>"+ key+"</button>"
+  }
+  $('#buttons').append(tmp);
+}, 1000);

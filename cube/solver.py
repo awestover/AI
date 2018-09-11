@@ -4,11 +4,10 @@
 
 import numpy as np
 from pprint import pprint
+import requests
 
 cube = []
-
-COLORS = ['G', 'Y', 'B', 'W', 'O', 'R']
-
+COLORS = ['G', 'Y', 'B', 'W', 'R', 'O']
 for color in COLORS:
     cube.append(np.array([[color, color],[color, color]]))
 
@@ -56,7 +55,7 @@ for i in range(len(COLORS)):
     tmp.append(([i, [1, 0]], COLORS[i], True))
     tmp.append(([i, [1, 1]], COLORS[i], True))
 states["solved"] = tmp
-states['whiteFace'] = [([0, [0,0]], "W", False), etc]
+# states['whiteFace'] = [([0, [0,0]], "W", False), etc]
 
 stateOrder = ["solved", "whiteFace", "Fish_1"]
 
@@ -103,4 +102,12 @@ while True:
         print("I don't know how to do this yet")
         break
 
+def sendData():
+    tmp = []
+    for a in cube:
+        tmp.append(a.tolist())
+    requests.post("http://127.0.0.1:5000/cubeData", json={"cubeData":tmp})
+
+
 pprint(cube)
+sendData()
