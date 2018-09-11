@@ -4,40 +4,7 @@
 # 0 if we don't know yet, and 2 if it is a tie
 
 from Tree import Tree
-
-N = 9
-wins = [
-    "012", "345", "678", # horizontal
-    "036", "147", "258", # vertical
-    "048", "246" # cross
-]
-
-# assumes that only 1 player wins in any state
-def isEnd(state):
-    for win in wins:
-        ct = 0
-        for ws in win:
-            ct += state[int(ws)]
-        if ct == 3:
-            return 1
-        elif ct == -3:
-            return -1
-    for xi in state:
-        if xi == 0:
-            return 0
-    return 2
-
-# takes in the state as a vector and the turn as a number (+1 or -1)
-def allPossibles(state, turn):
-    if isEnd(state) != 0:
-        return []
-    moves = []
-    for idx in range(N):
-        if state[idx] == 0:
-            tmp = state[:]
-            tmp[idx] = turn
-            moves.append(tmp)
-    return moves
+from comboFuncs import isEnd, allPossibles
 
 def getTurn(state, first=1):
     if state.count(first) > state.count(-first):
@@ -49,7 +16,7 @@ def getMove(state):
     root = Tree(state)
     leafs = [root]
     goal = getTurn(state, first=1) # first=which player (-1/+1) went first
-    for i in range(N+1):
+    for i in range(9+1):
         print("Depth i={}".format(i))
         new_leafs = []
         for leaf in leafs:
@@ -60,6 +27,7 @@ def getMove(state):
                 for possible in possibles:
                     new_leafs.append(Tree(possible, 0))
                     leaf.childs.append(new_leafs[-1])
+        print("number of leaves = {}".format(len(leafs)))
         leafs = new_leafs
 
     root.score()
@@ -81,6 +49,6 @@ def getMove(state):
     print("You will {}".format(outcome))
 
 if __name__ == "__main__":
-    # getMove([0]*9)
-    getMove([1,1,-1, 0,-1,0, 0,0,0])
+    getMove([0]*9)
+    # getMove([1,1,-1, 0,-1,0, 0,0,0])
     # getMove([1,0,0, 0,-1,0, 0,0,0])
