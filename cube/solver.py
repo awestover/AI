@@ -66,6 +66,7 @@ states['yellowFace'] = [([1, [0,0]], "Y", True), ([1, [0,1]], "Y", True),
                         ([1, [1,0]], "Y", True), ([1, [1,1]], "Y", True)]
 
 yellowSolveAlgs = ['Fish_1']
+pllSolveAlgs = ['Diagonal PLL', 'Parralel PLL switch']
 
 def rotate(oldcube, move):
     newcube = [np.copy(oldcubei) for oldcubei in oldcube]
@@ -108,7 +109,14 @@ while True:
                     break
             else:
                 print('PLL')
-                break
+                didSomething = False
+                for state in pllSolveAlgs:
+                    if isState(cube, states[state]):
+                        doFormula(cube, algs[state])
+                        didSomething = True
+                if not didSomething:
+                    print('PLL didn\'t happen, but it probably should have')
+                    break
 def sendData():
     tmp = []
     for a in cube:
