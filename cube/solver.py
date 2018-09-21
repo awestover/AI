@@ -43,8 +43,11 @@ algs["Diagonal(Website case 7)"] = algs["Fish_1"]+algs["Fish_2"]
 algs["The_double_sides(Website case 2)"] = algs["Fish_1"]+algs["Fish_1"]
 algs["(Website case 3)"] = algs["Fish_1"]+['U']+algs["Fish_1"]
 algs["(Webiste case 6)"] = algs["Fish_1"]+['Ui']+["Fish_2"]
+algs["Diagonal PLL"] = ['Ri','F','Ri','B','B','R','Fi','Ri','B','B','R','R']
+algs["Parralel PLL switch"] = algs["Diagonal PLL"]+['Ui']
 
-# "state name": [([faceIndex, [indexOnFace]], "COLOR", True/False (should it be this color or not this color)), other requirements]
+# requirements for state. Format:
+# "state name": [([faceIndex, [indexOnFace]], "COLOR", True/False (should it be this color?)), other_requierments]
 states = {
     "Fish_1": [([1, [1,0]], "Y", True)]
 }
@@ -55,9 +58,14 @@ for i in range(len(COLORS)):
     tmp.append(([i, [1, 0]], COLORS[i], True))
     tmp.append(([i, [1, 1]], COLORS[i], True))
 states["solved"] = tmp
-# states['whiteFace'] = [([0, [0,0]], "W", False), etc]
+states['whiteFace'] = [([3, [0,0]], "W", True),([3, [0,1]], "W", True),([3, [1,0]], "W", True),
+    ([3, [1,1]], "W", True),([0, [1,0]], "G", True),([0, [1,1]], "G", True),
+    ([2, [1,0]], "B", True),([2, [1,1]], "B", True),([4, [1,0]], "O", True),
+    ([4, [1,1]], "O", True),([5, [1,0]], "R", True),([5, [1,1]], "R", True)]
+states['yellowFace'] = [([1, [0,0]], "Y", True), ([1, [0,1]], "Y", True), 
+                        ([1, [1,0]], "Y", True), ([1, [1,1]], "Y", True)]
 
-stateOrder = ["solved", "whiteFace", "Fish_1"]
+yellowSolveAlgs = ['Fish_1']
 
 def rotate(oldcube, move):
     newcube = [np.copy(oldcubei) for oldcubei in oldcube]
@@ -76,32 +84,24 @@ def isState(cube, state):
             return False
     return True
 
-def getState(cube):
-    for state in stateOrder:
-        try:
-            if isState(cube, states[state]):
-                return state
-        except KeyError:
-            print("not done yet")
-            continue
-    return "none"
-
 cube = rotate(cube, 'R')
 pprint(cube)
 while True:
-    state = getState(cube)
-    print(state)
-
-    if state == "solved":
-        print("The computer solved your cube. Now go solve it yourself")
-        break
-    elif state == "Fish_1":
-        cube = doFormula(cube, algs['Fish_1'])
+    if isState(cube, states['solved']):
+        print('The computer solved your cube. Now go solve the cube yourself :P')
         break
     else:
-        print("I don't know how to do this yet")
-        break
-
+        if not isState(cube, states['whiteFace']):
+            # doFormula(cube, algs['solveWhite'])
+            print('I don\'t know how to solve the white face yet...')
+            break
+        else:
+            if not isState(cube, states['yellowFace']):
+                print("fish etc")
+                break
+            else:
+                print('PLL')
+                break
 def sendData():
     tmp = []
     for a in cube:
@@ -110,4 +110,7 @@ def sendData():
 
 
 pprint(cube)
-sendData()
+try:
+    sendData()
+except:
+    print('web thing is not running')
