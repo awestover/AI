@@ -32,7 +32,7 @@ moves = {
     "B":  {"indpairs":[(4,1),(3,4),(5,3),(1,5)], "indflips":(0)},
     "Bi": {"indpairs":[(1,4),(4,3),(3,5),(5,1)], "indflips":(0)},
     "D":  {"indpairs":[(4,0),(0,5),(5,2),(2,4)], "indflips":(1)},
-    "Di": {"indpairs":[(0,4),(5,0),(2,5),(4,2)], "indflips":(1)},
+    "Di": {"indpairs":[(0,4),(5,0),(2,5),(4,2)], "indflips":(1)}
 }
 
 algs = {}
@@ -45,6 +45,9 @@ algs["(Website case 3)"] = algs["Fish_1"]+['U']+algs["Fish_1"]
 algs["(Webiste case 6)"] = algs["Fish_1"]+['Ui']+["Fish_2"]
 algs["Diagonal PLL"] = ['Ri','F','Ri','B','B','R','Fi','Ri','B','B','R','R']
 algs["Parralel PLL switch"] = algs["Diagonal PLL"]+['Ui']
+
+algs['upRotation'] =   ['R', 'Li']
+algs['sideRotation'] = ['U', 'Di']
 
 # requirements for state. Format:
 # "state name": [([faceIndex, [indexOnFace]], "COLOR", True/False (should it be this color?)), other_requierments]
@@ -79,13 +82,17 @@ def doFormula(oldcube, formula):
         oldcube = rotate(oldcube, move)
     return oldcube
 
+def solveWhite(oldcube):
+    if oldcube[3, ]:
+    return oldcube
+
 def isState(cube, state):
     for req in state:
         if (cube[req[0][0]][req[0][1][0], req[0][1][1]] == req[1]) == req[2]:
             return False
     return True
 
-cube = rotate(cube, 'R')
+cube = rotate(cube, 'U')
 pprint(cube)
 while True:
     if isState(cube, states['solved']):
@@ -93,7 +100,7 @@ while True:
         break
     else:
         if not isState(cube, states['whiteFace']):
-            # doFormula(cube, algs['solveWhite'])
+            solveWhite(cube)
             print('I don\'t know how to solve the white face yet...')
             break
         else:
@@ -105,6 +112,7 @@ while True:
                         doFormula(cube, algs[state])
                         didSomething = True
                 if not didSomething:
+                    # do Up rotation
                     print('This yellow state is too hard to solve (AKA I am not programmed for it correctly)')
                     break
             else:
