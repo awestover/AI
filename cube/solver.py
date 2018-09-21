@@ -90,15 +90,31 @@ def doFormula(oldcube, formula):
     return oldcube
 
 def findCorner(oldcube, colors):
-    acorner = [(0, [0,1]),(1,[1,1]),(4,[1,0])]
+    corners = []
+    acorner = [(0, (0,1)),(1,(1,1)),(4,(1,0))]
+    corners.append(acorner)
     boolCube = [np.array([[False, False], [False, False]]) for i in range(6)]
-    
-    
+    for cInd in acorner:
+        boolCube[cInd[0]][cInd[1]] = True
+    for i in range(6):
+        if i < 3:
+            boolCube = doFormula(boolCube, 'upRotation')
+        else:
+            boolCube = doFormula(boolCube, 'sideRotation')
+        tmpInds = np.argwhere(np.array(boolCube)==True)
+        nInds = []
+        for tInd in tmpInds:
+            nInds.append((tInd[0], (tInd[1], tInd[2])))
+        corners.append(nInds)
 
+    import pdb; pdb.set_trace()
+    
+findCorner(cube, ['W', 'Y', 'R'])
 
 def solveWhite(oldcube):
     if not(oldcube[3][1,0] == 'W' and oldcube[0][1,1] == 'G' and oldcube[5][1,0] == 'O'):
-        while 
+        pass
+        # while 
     return oldcube
 
 def isState(cube, state):
