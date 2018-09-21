@@ -98,7 +98,14 @@ while True:
         else:
             if not isState(cube, states['yellowFace']):
                 print("fish etc")
-                break
+                didSomething = False
+                for state in yellowSolveAlgs:
+                    if isState(cube, states[state]):
+                        doFormula(cube, algs[state])
+                        didSomething = True
+                if not didSomething:
+                    print('This yellow state is too hard to solve (AKA I am not programmed for it correctly)')
+                    break
             else:
                 print('PLL')
                 break
