@@ -19,6 +19,12 @@ for color in COLORS:
 [5][1][4]
    [2]
    [3]
+
+On all faces this is what it looks like in terms of indices
+[00 01]
+[10 11]
+
+
 """
 moves = {
     "R":  {"indpairs":[(1,0),(2,1),(3,2),(0,3)], "indflips":([0,1],1)},
@@ -48,6 +54,7 @@ algs["Parralel PLL switch"] = algs["Diagonal PLL"]+['Ui']
 
 algs['upRotation'] =   ['R', 'Li']
 algs['sideRotation'] = ['U', 'Di']
+algs['frontRotation'] = ['F', 'Bi']
 
 # requirements for state. Format:
 # "state name": [([faceIndex, [indexOnFace]], "COLOR", True/False (should it be this color?)), other_requierments]
@@ -82,8 +89,16 @@ def doFormula(oldcube, formula):
         oldcube = rotate(oldcube, move)
     return oldcube
 
+def findCorner(oldcube, colors):
+    acorner = [(0, [0,1]),(1,[1,1]),(4,[1,0])]
+    boolCube = [np.array([[False, False], [False, False]]) for i in range(6)]
+    
+    
+
+
 def solveWhite(oldcube):
-    if oldcube[3, ]:
+    if not(oldcube[3][1,0] == 'W' and oldcube[0][1,1] == 'G' and oldcube[5][1,0] == 'O'):
+        while 
     return oldcube
 
 def isState(cube, state):
