@@ -53,11 +53,18 @@ let rotationGoing = false;
 
   z is straight out of the screen
 */
-
 $.get('/cubeData', function(colorData) {
-  init(JSON.parse(colorData));
-  animate();
-});
+    console.log(colorData);
+    init(JSON.parse(colorData));
+    animate();
+})
+  .fail(function(data){
+    console.log('not connected, that is ok.');
+    let x = [[["A", "A", "B", "W", "A", "O"], ["A", "Y", "B", "A", "A", "O"], ["A", "Y", "B", "A", "R", "A"], ["A", "A", "B", "W", "R", "A"]], [["G", "A", "A", "W", "A", "O"], ["G", "Y", "A", "A", "A", "O"], ["G", "Y", "A", "A", "R", "A"], ["G", "A", "A", "W", "R", "A"]]];
+    init(x);
+    animate();
+})
+
 
 function init(colorData) {
   camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 0.01, 10);
