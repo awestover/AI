@@ -89,6 +89,9 @@ def doFormula(oldcube, formula):
         oldcube = rotate(oldcube, move)
     return oldcube
 
+pprint(doFormula(cube, 'F'))
+import pdb; pdb.set_trace()
+
 def findCorner(oldcube, colors):
     corners = []
     acorner = [(0, (0,1)),(1,(1,1)),(4,(1,0))]
