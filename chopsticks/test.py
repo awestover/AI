@@ -14,6 +14,7 @@ mod = 5 # maybe this could change later
 # 1 is win state
 # -1 is lose state
 # 0 otherwise
+# note that [0,0,0,0] is scored as -1 although it doesn't matter since you can't reach this state
 def scoreState(state):
     if state[0] == 0 and state[1] == 0:
         return -1
@@ -21,6 +22,15 @@ def scoreState(state):
         return 1
     else:
         return 0
+
+# array state to string
+def freezeState(state):
+    return " ".join(map(str, state))
+
+# string state to array
+def unfreezeState(state):
+    tmp = state.split(" ")
+    return [int(ti) for ti in tmp]
 
 # switch which hand is first
 def swapHands(state):
@@ -54,4 +64,41 @@ def getValidMoves(state):
 
     return moves
 
-print(getValidMoves([0,4,1,2]))
+# all valid hands
+allValidHands = []
+for i in range(0,mod):
+    for j in range(0, i+1):
+        allValidHands.append((j,i))
+numValidHands = len(allValidHands)
+
+# all valid states
+stateToIndex = {}
+indexToState = []
+for i in range(numValidHands):
+    for j in range(numValidHands):
+        nextState = [allValidHands[i][0],allValidHands[i][1],allValidHands[j][0],allValidHands[j][1]]
+        indexToState.append(nextState)
+        stateToIndex[freezeState(nextState)] = numValidHands*i+j
+numStates = len(indexToState)
+transitionMatrix = np.zeros((numStates, numStates))
+
+for i in range(numStates):
+    nextMoves = getValidMoves(indexToState[i])
+    # note the need 2 swap hands 2 times, it is allways the turn of whomevers hands are listed first!
+    afterOpponentStates = [getValidMoves(swapHands(si)) for si in nextMoves]
+    for j in range(len(afterOpponentStates)):
+        for k in range(len(afterOpponentStates[j])):
+            afterOpponentStates[j][k] = swapHands(afterOpponentStates[j][k])
+
+    for path in afterOpponentStates:
+        for opponentState in path:
+            transitionMatrix[i][stateToIndex[freezeState(opponentState)]] = 1
+            # NOTE: we are saying the matrix is:
+            # |--to---
+            # from
+            # |
+            # i.e. indexing by the state that we are at FIRST
+            # this is significant because this is NOT what we did in math e23a
+
+for i in range(numStates):
+    print(indexToState[i], scoreState(indexToState[i]))
