@@ -12,4 +12,4 @@ There are lots of tasks which it would be really cool to have a computer perform
 * a very fun game
 * solved with reinforcement learning
 * really cool
-<img src="chopsticks/mod16.png">
+<img src="chopsticks/imgs/mod16.png">
