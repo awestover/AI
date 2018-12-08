@@ -12,7 +12,7 @@ from utilityFunctions import *
 import matplotlib.pyplot as plt
 import json
 
-mod = 16 # could change later
+mod = 7 # could change later
 
 # all valid hands
 allValidHands = []

@@ -26,6 +26,7 @@ def chooseMove(stateIdx):
         valuesForActions.append(valueAction)
     return transitions[stateIdx][np.argmax(valuesForActions)]['newState']
 
+print("Mod {}".format(mod))
 print("computer allways listed first FYI")
 state = storeidx([1,1,1,1])
 while scoreState(allStates[state]) == 0:
