@@ -12,7 +12,7 @@ from utilityFunctions import *
 import matplotlib.pyplot as plt
 import json
 
-mod = 5 # maybe this could change later
+mod = 16 # could change later
 
 # all valid hands
 allValidHands = []
@@ -52,7 +52,7 @@ values = [scoreState(state)*0 for state in allStates]
 # values = [2*(np.random.random()-0.5) for state in allStates]
 
 gamma = 0.9
-theta = 0.00001 # 0.0001
+theta = 0.0000001 # 0.0001
 converged = False
 itter = 0
 while not converged:

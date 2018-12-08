@@ -54,3 +54,5 @@ while scoreState(allStates[state]) == 0:
         state = storeidx(move)
         print("Player went, state is:")
         print(allStates[state])
+
+print("game over")
