@@ -12,7 +12,7 @@ from utilityFunctions import *
 import matplotlib.pyplot as plt
 import json
 
-mod = 7 # could change later
+mod = 5 # could change later
 
 # all valid hands
 allValidHands = []
@@ -74,7 +74,7 @@ while not converged:
     else:
         vvTemp = np.array(values).reshape(numValidHands, numValidHands)
         plt.imshow(vvTemp)
-        plt.pause(0.01)
+        plt.pause(0.1)
 
 with open("results.json", 'w') as f:
     json.dump({
