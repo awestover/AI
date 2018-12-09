@@ -48,7 +48,7 @@ while scoreState(allStates[state]) == 0:
                     move[1], move[0] = move[0], move[1]
                 if move[2] > move[3]:
                     move[2], move[3] = move[3], move[2]
-                possibleMoves = getValidMoves(swapHands(allStates[state]), mod)
+                possibleMoves = validNextStates(swapHands(allStates[state]), mod)
                 possibleMoves = [storeidx(swapHands(pm)) for pm in possibleMoves]
                 if storeidx(move) in possibleMoves:
                     validMove = True

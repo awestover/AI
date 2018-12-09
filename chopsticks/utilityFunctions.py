@@ -29,7 +29,7 @@ def unfreezeState(state):
 def swapHands(state):
     return state[2:] + state[:2]
 
-def getValidMoves(state, mod):
+def validNextStates(state, mod):
     if scoreState(state) != 0: # terminal states lead to themselves ONLY AND ALLWAYS
         return [state]
 

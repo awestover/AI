@@ -39,13 +39,13 @@ def storeidx(state):
 
 for i in range(numStates):
     transitions.append([])
-    nextMoves = getValidMoves(allStates[i], mod) # NOTE: i = storeidx(allStates[i])
+    nextMoves = validNextStates(allStates[i], mod) # NOTE: i = storeidx(allStates[i])
     for nextMove in nextMoves:
         # NOTE: need to swap hands 2 times, it is allways the turn of whomevers hands are listed first!
         reward = scoreState(nextMove)
         if scoreState(allStates[i]) != 0:
             reward = 0
-        nextStates = [storeidx(swapHands(si)) for si in getValidMoves(swapHands(nextMove), mod)]
+        nextStates = [storeidx(swapHands(si)) for si in validNextStates(swapHands(nextMove), mod)]
         transitions[i].append({"reward": reward, "newState": storeidx(nextMove), "nextStates": nextStates, "prs": [1.0/len(nextStates) for si in nextStates]})
 
 values = [scoreState(state)*0 for state in allStates]
