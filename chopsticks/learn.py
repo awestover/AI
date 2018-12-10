@@ -51,7 +51,7 @@ for i in range(numStates):
 values = [scoreState(state)*0 for state in allStates]
 # values = [2*(np.random.random()-0.5) for state in allStates]
 
-gamma = 0.9
+gamma = 0.999999
 theta = 0.0000001 # 0.0001
 converged = False
 itter = 0
