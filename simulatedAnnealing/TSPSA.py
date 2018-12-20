@@ -50,10 +50,11 @@ import matplotlib.pyplot as plt
 N = 100
 X = np.random.random((N,2))
 
-Tmax = 10000; Tmin = 10
-def temperature(Temp): # need to experiment with this some more
+Tcur = np.sqrt(2)
+# Tmax = 10000; Tmin = 10
+# def temperature(Temp): # need to experiment with this some more
 	# return Temp*0.00001
-	return (Temp**0.5)*0.288/5000
+	# return (Temp**0.5)*0.288/5000
 
 verts = [i for i in range(N)]
 curValue = value(X, verts, N)
@@ -61,9 +62,14 @@ curValue = value(X, verts, N)
 badMovesTaken = []
 values = []
 
-for Temp in range(Tmax, Tmin,-1):
-	if Temp % 1000 == 0:
-		displayState(X, verts, pause=False)
+gamma = 0.99
+
+for i in range(100000):
+# for Temp in range(Tmax, Tmin,-1):
+	# if Temp % 1000 == 0:
+		# displayState(X, verts, pause=False)
+	Tcur = Tcur*gamma
+
 	proposedSwap = randomSwap(N)
 	# test = verts[:]
 	# flipSubArr(test, *proposedSwap, N)
@@ -72,7 +78,7 @@ for Temp in range(Tmax, Tmin,-1):
 
 	# dVal < 0 -> it is a good move, exploit it 
 	# else -> not a good move, may explore anyways in case it leads to a good move
-	if dVal < 0 or np.exp(-dVal / temperature(Temp)) > np.random.random(): 
+	if dVal < 0 or np.exp(-dVal / Tcur) > np.random.random(): 
 		flipSubArr(verts, *proposedSwap, N)
 		curValue += dVal
 		values.append(dVal)
