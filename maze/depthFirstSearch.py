@@ -112,3 +112,7 @@ plt.show()
 import json
 with open("maze.json", 'w') as f:
     json.dump(pixel_grid, f)
+
+wallMatrix = [[grid[i][j].walls for j in range(N)] for i in range(N)]
+with open("grid.json", 'w') as f:
+    json.dump(wallMatrix, f)
