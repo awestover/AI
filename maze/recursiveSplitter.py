@@ -2,6 +2,10 @@
 import matplotlib.pyplot as plt
 import random
 
+# note that this is not quite working: a wall can block off a previous hole in a wall
+# I can't think of a great way to fix this besides having the hole indices determine where the walls are, which seems
+# about as complicated as my below comment (see end of the file)
+
 # make walls on the portion of the grid from start i (si) to end i (ei) (both endpoints included)
 def wallDivide(si, ei, sj, ej):
     # base case of the recursion is to do nothing, happens if the grid is too small
@@ -30,7 +34,7 @@ def wallDivide(si, ei, sj, ej):
         wallDivide(si, wallI-1, wallJ+1, ej)
         wallDivide(wallI+1, ei, wallJ+1, ej)
 
-N = 100
+N = 10
 # 0 means no wall, 1 means there is a wall
 grid = [[0 for j in range(N)] for i in range(N)]
 wallDivide(0, N-1, 0, N-1)

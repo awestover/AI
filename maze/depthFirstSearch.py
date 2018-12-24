@@ -29,8 +29,8 @@ N = 30
 class Cell():
     """the cell class"""
     def __init__(self, idx):
-        self.visited = False
-        self.walls = [True, True, True, True]
+        self.visited = 0
+        self.walls = [1, 1, 1, 1]
         # walls are [right, up, left, down]
         self.idx = idx
 
@@ -55,7 +55,7 @@ def complement_wall(wall):
 
 grid = [[Cell([i, j]) for j in range(N)] for i in range(N)]
 
-grid[0][0].visited = True
+grid[0][0].visited = 1
 current_cell = [0,0]
 backtracking_stack = [grid[current_cell[0]][current_cell[1]]]
 
@@ -65,11 +65,11 @@ while visitedCt < N*N:
     unvisited_neighbors = get_unvisited_neighbors(grid, current_cell)
     if len(unvisited_neighbors) > 0:
         neighbor = random.choice(unvisited_neighbors)
-        grid[current_cell[0]][current_cell[1]].walls[neighbor["wall"]] = False
-        grid[neighbor["idx"][0]][neighbor["idx"][1]].walls[complement_wall(neighbor["wall"])] = False
+        grid[current_cell[0]][current_cell[1]].walls[neighbor["wall"]] = 0
+        grid[neighbor["idx"][0]][neighbor["idx"][1]].walls[complement_wall(neighbor["wall"])] = 0
         backtracking_stack.append(grid[neighbor["idx"][0]][neighbor["idx"][1]])
         current_cell = neighbor["idx"]
-        grid[current_cell[0]][current_cell[1]].visited = True
+        grid[current_cell[0]][current_cell[1]].visited = 1
         visitedCt += 1
     elif len(backtracking_stack) > 0:
         backtracking_stack.pop()
@@ -107,3 +107,8 @@ for i in range(N):
                 pixel_grid[3*i+2][3*j+jj] = grid[i][j].walls[3] # down
 plt.imshow(pixel_grid)
 plt.show()
+
+# output the pixel_grid to a file for use in maze solving programs
+import json
+with open("maze.json", 'w') as f:
+    json.dump(pixel_grid, f)
