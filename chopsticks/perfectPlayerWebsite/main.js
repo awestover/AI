@@ -32,7 +32,7 @@ function loadStrategy(stratName){
   });
 }
 for (let m in availableModuli) {
-  loadStrategy("strategy" + availableModuli[m]);  
+  loadStrategy("strategy" + availableModuli[m]);
 }
 
 // function handleUserInput() {
@@ -104,7 +104,7 @@ function handleQuadrantHit(quad) {
       }
     }
     else if (quad == 3) {
-      if (state[2] > 0 && state[3] < mod) {
+      if (state[3] > 0 && state[2] < mod) {
         state[2] += 1;
         state[3] -= 1;
       }
