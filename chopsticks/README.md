@@ -10,3 +10,8 @@ Using reinforcement learning I made a perfect chopsticks player
   * resultsToStrategy.py: compute the optimal move from each state using the value function to make a simpler strategy csv
 # how to test it
 Either download the code and play from the terminal, or go to the website: <a href="https://chopsticks.surge.sh">https://chopsticks.surge.sh</a>
+
+# notes:
+  * the gui is not great on the website, also it allows illegal splits (1 0 to 0 1 for instance)
+  * somehow need to think of a way to make it look nice...
+

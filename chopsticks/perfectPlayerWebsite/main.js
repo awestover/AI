@@ -1,6 +1,12 @@
 let strategies = {};
 let strategyName = "strategy5";
+let tempSname = prompt("What modulus would you like to play in? Default is 5, and available moduli are 2, 3, 4, 5 and 6");
+let availableModuli = ["2", "3", "4", "5", "6"];
 let mod = 5;
+if (availableModuli.indexOf(tempSname)!=-1) {
+  mod = parseInt(tempSname);
+  strategyName = "strategy"+mod;
+}
 
 // "none", "split", or "hit"
 let moveType = "none";
@@ -25,8 +31,9 @@ function loadStrategy(stratName){
     }
   });
 }
-loadStrategy("strategy5");
-loadStrategy("strategy6");
+for (let m in availableModuli) {
+  loadStrategy("strategy" + availableModuli[m]);  
+}
 
 // function handleUserInput() {
 //   let proposedMove = $("#userInput").val();
