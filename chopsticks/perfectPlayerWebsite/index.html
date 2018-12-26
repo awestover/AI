@@ -3,12 +3,38 @@
   <head>
     <meta charset="utf-8">
     <title>chopsticks</title>
+    <link rel="stylesheet" href="style.css">
     <script src="libraries/jquery.min.js" charset="utf-8"></script>
   </head>
   <body>
       <script src="main.js" charset="utf-8"></script>
-      <label for="state">Input a state</label>
-      <input type="text" name="state" id="userInput" value="1 1 1 2">
-      <button type="button" name="submit" onclick="handleUserInput()">submit</button>
+      <div onclick="handleQuadrantHit(1)" class="quadrant Q1">
+        <div class="centered">
+          <h2>Computer Hand 1</h2>
+          <p id="ch1">1</p>
+        </div>
+      </div>
+      <div onclick="handleQuadrantHit(2)" class="quadrant Q2">
+        <div class="centered">
+          <h2>User Hand 1</h2>
+          <p id="uh1">1</p>
+        </div>
+      </div>
+      <div onclick="handleQuadrantHit(3)" class="quadrant Q3">
+        <div class="centered">
+          <h2>User Hand 2</h2>
+          <p id="uh2">1</p>
+        </div>
+      </div>
+      <div onclick="handleQuadrantHit(4)" class="quadrant Q4">
+        <div class="centered">
+          <h2>Computer Hand 2</h2>
+          <p id="ch2">1</p>
+        </div>
+      </div>
+      <button class="ibtn" type="button" id="reset" onclick="performReset();">Reset</button>
+      <button class="ibtn" type="button" id="split" onclick="moveType='split';">Split</button>
+      <button class="ibtn" type="button" id="hit" onclick="moveType='hit';">Hit</button>
+      <button class="ibtn" type="button" id="submit" onclick="performMove()">Submit</button>
   </body>
 </html>

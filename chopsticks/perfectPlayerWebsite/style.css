@@ -1,0 +1,70 @@
+/*
+lots of code is from:
+  https://www.w3schools.com/howto/howto_css_split_screen.asp
+*/
+body {
+  font-family: Arial;
+  color: white;
+}
+
+.quadrant {
+  height: 50%;
+  width: 50%;
+  position: fixed;
+  /* z-index: 1; */
+  overflow: hidden;
+}
+
+.Q1 {
+  right: 0;
+  top: 0;
+  background-color: #1c56b2;
+}
+.Q2 {
+  left: 0;
+  top: 0;
+  background-color: #ed6f61;
+}
+.Q3 {
+  left: 0;
+  bottom: 0;
+  background-color: #d83220;
+}
+.Q4 {
+  right: 0;
+  bottom: 0;
+  background-color: #6196ed;
+}
+
+.centered {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.ibtn {
+  position: absolute;
+  width: 15%;
+  height: 5%;
+}
+
+#reset {
+  left: 50%;
+  transform: translate(-50%, 0);
+}
+
+#split {
+  left: 0;
+}
+
+#hit {
+  right: 0;
+}
+
+#submit {
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
