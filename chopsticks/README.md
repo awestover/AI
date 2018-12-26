@@ -12,6 +12,6 @@ Using reinforcement learning I made a perfect chopsticks player
 Either download the code and play from the terminal, or go to the website: <a href="https://chopsticks.surge.sh">https://chopsticks.surge.sh</a>
 
 # notes:
-  * the gui is not great on the website, also it allows illegal splits (1 0 to 0 1 for instance)
+  * the gui is not great on the website,  
   * somehow need to think of a way to make it look nice...
 

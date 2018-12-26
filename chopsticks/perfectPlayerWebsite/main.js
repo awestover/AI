@@ -140,7 +140,13 @@ function performMove() {
     return false;
   }
   if (moveType == "split") {
-    console.log("Did split");
+    if ((oldState[2] == state[2] && oldState[3] == state[3]) || (oldState[2] == state[3] && oldState[3] == state[2])) {
+      alert("Bad split (didn't really change the hand states swapping hands is not a move)");
+      return false;
+    }
+    else {
+      console.log("Did split");
+    }
   }
   else if (moveType == "hit") {
     if (hitInfo["from"] == -1 || hitInfo["to"] == -1){
