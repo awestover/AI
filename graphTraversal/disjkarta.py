@@ -1,2 +1,0 @@
-
-# classic graph theory algorithm
