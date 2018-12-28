@@ -1,6 +1,4 @@
-
 from BinaryHeap import BinaryHeap
-from Node import Node
 
 # classic graph theory algorithm
 # -1 means not reachable
@@ -13,6 +11,17 @@ test_graph = [
     [-1, 9 , -1, -1, -1, -1, 6 ],
     [-1, -1, -1, -1, 7 , 6 , -1]
 ]
+
+class Node:
+    def __init__(self, index):
+        self.index = index
+
+    def getValue(self):
+        return dists[self.index]
+
+    def __str__(self):
+        return "index: {}, dists: {}".format(self.index, dists[self.index])
+
 
 # GOAL: get from node 0 to node 6
 start = 0
@@ -47,6 +56,6 @@ while heap.findMin().index != goal:
         new_distance = connection["distance"] + dists[curMinIdx]
         if new_distance < dists[connection["index"]]:
             dists[connection["index"]] = new_distance
-            heap.insert(Node(connection["index"]))# potential bug: Am I inserting things multiple times?
+            heap.insert(Node(connection["index"])) # potential bug: Am I inserting things multiple times?
     heap.deleteMin()
     print(heap)

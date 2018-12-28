@@ -1,5 +1,3 @@
-from Node import Node
-
 # this is a min-heap (root is smallest element)
 class BinaryHeap():
     def __init__(self):
@@ -58,4 +56,4 @@ class BinaryHeap():
         return self.length == 0
 
     def __str__(self):
-        return str(self.nodes)
+        return " \t".join([nodeI.__str__() for nodeI in self.nodes])
