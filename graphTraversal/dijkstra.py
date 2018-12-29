@@ -46,6 +46,7 @@ while top of the heap is not the goal node:
     heap.deleteMin()
 """
 dists = [0] + [float('inf') for i in range(N-1)] # distances from the start node (start node is distance 0 from itself)
+best_paths = ["" for i in range(N)]
 heap.insert(Node(0))
 while heap.findMin().index != goal:
     curMinIdx = heap.findMin().index
@@ -56,6 +57,9 @@ while heap.findMin().index != goal:
         new_distance = connection["distance"] + dists[curMinIdx]
         if new_distance < dists[connection["index"]]:
             dists[connection["index"]] = new_distance
+            best_paths[connection["index"]] = best_paths[curMinIdx] + str(curMinIdx)
             heap.insert(Node(connection["index"])) # potential bug: Am I inserting things multiple times?
     heap.deleteMin()
     print(heap)
+
+print("best path: {}, distance: {}".format(best_paths[goal], dists[goal]))
