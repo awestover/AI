@@ -85,3 +85,5 @@ while not at_cell(current_cell, end_cell):
 
     if random.random() < 0.1:
         plt.pause(0.01)
+
+plt.show()
