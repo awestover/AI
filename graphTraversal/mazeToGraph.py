@@ -1,8 +1,8 @@
 import matplotlib.pyplot as plt
 import json
-with open('maze.json', 'r') as f:
+with open('data/maze.json', 'r') as f:
     walls = json.load(f)
-# with open('smallMaze.json', 'r') as f:
+# with open('data/smallMaze.json', 'r') as f:
 #     walls = json.load(f)
 
 plt.imshow(walls)
@@ -88,5 +88,5 @@ for i in range(num_corners-1):
                 sparse_graph[j]["values"].append(rightCorner - leftCorner)
                 connections += 1
 print(connections)
-with open('bigGraph.json', 'w') as f:
+with open('data/bigGraph.json', 'w') as f:
     json.dump({"sparse_graph": sparse_graph, "nodes": corner_coords}, f)

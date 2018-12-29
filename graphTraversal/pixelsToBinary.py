@@ -1,8 +1,8 @@
 import json
 import numpy as np
 from PIL import Image
-# img = Image.open('smallMaze.png')
-img = Image.open('actualMaze.png')
+# img = Image.open('images/smallMaze.png')
+img = Image.open('images/actualMaze.png')
 arr = np.array(img)[:,:,:3]
 
 walls = np.zeros((arr.shape[0], arr.shape[1]))
@@ -22,5 +22,5 @@ import matplotlib.pyplot as plt
 plt.imshow(walls)
 plt.show()
 
-with open('smallMaze.json', 'w') as f:
+with open('data/smallMaze.json', 'w') as f:
     json.dump(walls, f)

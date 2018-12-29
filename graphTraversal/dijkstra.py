@@ -33,7 +33,8 @@ heap = BinaryHeap()
 # pseudocode
 """
 dists = [0] + [float('inf') for i in range(N-1)] # distances from the start node (start node is ditance 0 from itself)
-put 0 in the heap (need to put the index in the heap with the value which is the distnace, will have to modify the heap class so that this is possible)
+queue everything
+
 while top of the heap is not the goal node:
     get the node from the top of the heap
     # travel to every connection that is not -1 leading out of it (note that every edge is an arrow going both ways so the adjacency matrix is symetric)
@@ -42,14 +43,26 @@ while top of the heap is not the goal node:
         see if that is smaller than the current distane recorded in dists
         if it is a shorter path:
             change the distance entry so that it says that it is shorter
-            insert this node in the heap # QUESTION: do we have to worry about a node being in the heap multiple times? We could have a variable 'visited' or something for each node that indicates if it is in the heap already if this is necessary...
     heap.deleteMin()
 """
-dists = [0] + [float('inf') for i in range(N-1)] # distances from the start node (start node is distance 0 from itself)
-best_paths = ["" for i in range(N)]
+dists = [] # distances from the start node (start node is distance 0 from itself)
+for i in range(N):
+    if i == start:
+        dists.append(0)
+    else:
+        dists.append(float('inf'))
 heap.insert(Node(0))
+
+alreadyProcessed = [False for i in range(N)]
+
+best_paths = [[] for i in range(N)]
 while heap.findMin().index != goal:
     curMinIdx = heap.findMin().index
+    heap.deleteMin()
+    if alreadyProcessed[curMinIdx]:
+        continue
+    else:
+        alreadyProcessed[curMinIdx] = True
     connections = test_graph[curMinIdx]
     real_connections = [{"index": i, "distance": connections[i]} for i in range(len(connections)) if connections[i] != -1]
     # travel to every connection that is not -1 leading out of it (note that every edge is an arrow going both ways so the adjacency matrix is symmetric)
@@ -57,9 +70,8 @@ while heap.findMin().index != goal:
         new_distance = connection["distance"] + dists[curMinIdx]
         if new_distance < dists[connection["index"]]:
             dists[connection["index"]] = new_distance
-            best_paths[connection["index"]] = best_paths[curMinIdx] + str(curMinIdx)
-            heap.insert(Node(connection["index"])) # potential bug: Am I inserting things multiple times?
-    heap.deleteMin()
+            best_paths[connection["index"]] = best_paths[curMinIdx] + [curMinIdx]
+            heap.insert(Node(connection["index"])) # Note: sometimes will have multiple of a single node in the heap, the one with minimum distance will be processed first, and its results override everything else
     print(heap)
 
 print("best path: {}, distance: {}".format(best_paths[goal], dists[goal]))

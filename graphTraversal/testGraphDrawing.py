@@ -16,11 +16,11 @@ print("Edges of graph: ")
 print(G.edges())
 
 nx.draw(G)
-plt.savefig("simple_path.png") # save as png
+plt.savefig("images/simple_path.png") # save as png
 plt.show() # display
 
 import json
-with open('bigGraph.json', 'r') as f:
+with open('data/bigGraph.json', 'r') as f:
     data = json.load(f)
 
 for node in data["nodes"]:
