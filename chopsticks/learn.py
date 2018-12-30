@@ -51,7 +51,7 @@ for i in range(numStates):
 values = [scoreState(state)*0 for state in allStates]
 # values = [2*(np.random.random()-0.5) for state in allStates]
 
-gamma = 0.999999
+gamma = 1#0.999999
 theta = 0.0000001 # 0.0001
 converged = False
 itter = 0
@@ -75,6 +75,7 @@ while not converged:
         vvTemp = np.array(values).reshape(numValidHands, numValidHands)
         plt.imshow(vvTemp)
         plt.pause(0.1)
+plt.show()
 
 with open("results.json", 'w') as f:
     json.dump({
@@ -82,3 +83,23 @@ with open("results.json", 'w') as f:
                 "allStates":allStates, "values":values,
                 "transitions":transitions, "stateToIndex": stateToIndex
                 }, f)
+
+# lots of the values are really close to 1, but not quite 1, and they are distinguishable
+#plt.hist(values)
+#plt.show()
+
+#def superZoom(x, y):
+#    return (x**(-y)) / -y
+
+
+#def superZoomPlot(y):
+#    plt.hist(superZoom(0.0000000001+1-np.array(values), y))
+#    plt.show()
+
+#import pdb; pdb.set_trace()
+#superZoomPlot(18)
+
+#large_values = [vi for vi in values if vi > 0.999]
+
+#print(min(large_values))
+#print(max(large_values))
