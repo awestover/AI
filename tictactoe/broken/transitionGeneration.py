@@ -40,6 +40,7 @@ boards = [] # only legit ones
 for board in allBoards:
     if tookTurns(board, -1) and isEnd(board) == 0:
         boards.append(board)
+print(len(boards))
 
 nextBoards = []
 scores = []
@@ -56,3 +57,5 @@ for board in boards:
             scores[-1].append(0.75)
         else:
             scores[-1].append(0.5)
+
+# print(nextBoards)

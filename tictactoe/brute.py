@@ -49,6 +49,7 @@ def getMove(state):
     print("You will {}".format(outcome))
 
 if __name__ == "__main__":
-    getMove([0]*9)
+    # getMove([0]*9)
     # getMove([1,1,-1, 0,-1,0, 0,0,0])
     # getMove([1,0,0, 0,-1,0, 0,0,0])
+    getMove([1,0,0,0,-1,0,-1,0,1])
