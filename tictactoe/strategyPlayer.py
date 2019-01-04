@@ -37,7 +37,7 @@ def displayBoard(state):
 
 N = 3
 state = "EEEEEEEEE"
-computerTurn = False
+computerTurn = True
 while whoWon(state) == "NoOne":
     if computerTurn:
         state = strategy[state]

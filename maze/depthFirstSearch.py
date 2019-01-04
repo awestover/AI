@@ -24,7 +24,7 @@ while there are unvisited cells:
 
 import random
 
-N = 50
+N = 20
 
 class Cell():
     """the cell class"""

@@ -1,0 +1,13 @@
+simulated annealing pseudocode
+
+C = C init
+for T = Tmax to Tmin
+	E_c = E(c) (energy, what we want to maximize)
+	N = next(c)
+	E_N = E(N)
+	delta E = E_N - E_C
+	if (delta E > 0) (it is a good move)
+		C = N
+	elif (exp(delta E / T) > rand(0,1))
+		not a good move, but maybe good to explore in the long run
+		C = N
