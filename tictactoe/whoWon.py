@@ -3,9 +3,8 @@ def whoWon(state, N, M):
     # horizontal
     # for each row
     for i in range(N):
-        type = state[N*i]
-        run = 1
-        for j in range(1, N):
+        type = None; run = 0
+        for j in range(0, N):
             if state[N*i+j] == type:
                 run += 1
             else:
@@ -17,9 +16,8 @@ def whoWon(state, N, M):
     # vertical
     # for each column
     for j in range(N):
-        type = state[j]
-        run = 1
-        for i in range(1, N):
+        type = None; run = 0
+        for i in range(0, N):
             if state[N*i+j] == type:
                 run += 1
             else:
@@ -29,13 +27,12 @@ def whoWon(state, N, M):
                 return type
 
     # diagonal
-    # right down
+    # SouthEast
     # upper triangle
     # for each diagonal
     for j in range(0, N-M+1):
-        type = state[j]
-        run = 1
-        for i in range(0, N-j): # check ERROR ERROR
+        type = None; run = 0
+        for i in range(0, N-j):
             if state[N*i+j+i] == type:
                 run += 1
             else:
@@ -44,12 +41,11 @@ def whoWon(state, N, M):
             if run == M and type != "E":
                 return type
 
-    # right down
+    # SouthEast
     # bottom triangle
     for i in range(1, N-M+1):
-        type = state[N*i]
-        run = 1
-        for j in range(0, N-i): # check ERROR ERROR
+        type = None; run = 0
+        for j in range(0, N-i):
             if state[N*(i+j)+j] == type:
                 run += 1
             else:
@@ -58,12 +54,11 @@ def whoWon(state, N, M):
             if run == M and type != "E":
                 return type
 
-    # left up
+    # NorthEast
     # left triangle
-    for i in range(M, N):
-        type = state[N*i]
-        run = 1
-        for j in range(0, i):
+    for i in range(M-1, N):
+        type = None; run = 0
+        for j in range(0, i+1):
             if state[N*(i-j)+j] == type:
                 run += 1
             else:
@@ -72,16 +67,16 @@ def whoWon(state, N, M):
             if run == M and type != "E":
                 return type
 
-    # down left
+    # NorthEast
     # right triangle
     for j in range(1, N-M+1):
-        type = state[N*j+N-1]
-        run = 1
-        for i in range(j, N):
-            if state[N*i + N-(i-j+1)] == type:
+        type = None; run = 0
+        for i in range(0, N-j):
+            # N*i + N-(i-j+1)
+            if state[N*(N-j-1)+i+j] == type:
                 run += 1
             else:
-                type = state[N*i + N-(i-j+1)]
+                type = state[N*(N-j-1)+i+j]
                 run = 1
             if run == M and type != "E":
                 return type
@@ -130,5 +125,18 @@ if __name__ == "__main__":
     for i in range(0, M):
         idx = (N-1-i)*N+i+1+2
         board = board[:idx-1]+"O"+board[idx:]
+    print(whoWon(board, N, M))
+    printBoard(board, N)
+
+
+    board = "XXEEEEEEE"
+    N = 3
+    M = 2
+    print(whoWon(board, N, M))
+    printBoard(board, N)
+
+    board = "XEEEEEEEE"
+    N = 3
+    M = 2
     print(whoWon(board, N, M))
     printBoard(board, N)

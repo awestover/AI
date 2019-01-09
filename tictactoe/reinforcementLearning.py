@@ -6,42 +6,14 @@
 # QUESTION: DO I need to reward ties?
 # ANSWER: Probably...
 
+from whoWon import whoWon
+# N by N tic tack toe grid, need to get M in a row
 N = 3 # grid size
-M = 2 # number in a row for a win
+M = 3 # number in a row for a win
 import json
 
 def strReplace(s, i, new_chr):
     return s[:i]+new_chr + s[i+1:]
-
-wins = [
-    "012", "345", "678", # horizontal
-    "036", "147", "258", # vertical
-    "048", "246" # cross
-]
-
-# this is really bad and not efficient and stuff!!!!!
-
-# assumes that only 1 player wins in any state
-# N by N tic tack toe grid, need to get M in a row
-from whoWon import whoWon
-
-# assumes that only 1 player wins in any state
-def whoWonSimple(state):
-    for win in wins:
-        Xct = 0; Oct = 0
-        for ws in win:
-            if state[int(ws)] == "X":
-                Xct += 1
-            elif state[int(ws)] == "O":
-                Oct += 1
-        if Xct == 3:
-            return "X"
-        elif Oct == 3:
-            return "O"
-    for xi in state:
-        if xi == "E":
-            return "NoOne" # no one won yet
-    return "Tie"  # it is a tie game
 
 # generate the state space
 # note: this includes some states where it is not Xs turn
@@ -50,6 +22,7 @@ def whoWonSimple(state):
 states_by_depth = [set() for i in range(N*N+1)]
 states_by_depth[0].add("E"*N*N)
 for previous_depth in range(N*N):
+    print(previous_depth, len(states_by_depth[previous_depth]))
     for previous_state in states_by_depth[previous_depth]:
         if whoWon(previous_state, N, M) == "NoOne":
             for idx in range(N*N):
