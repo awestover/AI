@@ -1,6 +1,13 @@
 # AI
 There are lots of tasks which it would be really cool to have a computer perform. 
 
+# graphTraversal
+* solve minimum traversal length path
+
+# maze
+* generate mazes
+* solve mazes 
+
 # ticktacktoe
 * A simple game, which I solved with a brute force game tree search
 * Highlights how infeasible this approach is to larger game spaces

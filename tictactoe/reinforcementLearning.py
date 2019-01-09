@@ -200,3 +200,9 @@ for i in range(len(states)):
 
 with open('strategy.json', 'w') as f:
     json.dump(strategyJson, f)
+
+import numpy as np
+vv = np.array(values + [-1]*(81*81 - len(values)))
+vv = vv.reshape((81, 81))
+plt.imshow(vv)
+plt.show()
