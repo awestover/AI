@@ -6,7 +6,8 @@
 # QUESTION: DO I need to reward ties?
 # ANSWER: Probably...
 
-N = 3 # can't extend this until I have a better win function
+N = 3 # grid size
+M = 2 # number in a row for a win
 import json
 
 def strReplace(s, i, new_chr):
@@ -18,8 +19,14 @@ wins = [
     "048", "246" # cross
 ]
 
+# this is really bad and not efficient and stuff!!!!!
+
 # assumes that only 1 player wins in any state
-def whoWon(state):
+# N by N tic tack toe grid, need to get M in a row
+from whoWon import whoWon
+
+# assumes that only 1 player wins in any state
+def whoWonSimple(state):
     for win in wins:
         Xct = 0; Oct = 0
         for ws in win:
@@ -44,7 +51,7 @@ states_by_depth = [set() for i in range(N*N+1)]
 states_by_depth[0].add("E"*N*N)
 for previous_depth in range(N*N):
     for previous_state in states_by_depth[previous_depth]:
-        if whoWon(previous_state) == "NoOne":
+        if whoWon(previous_state, N, M) == "NoOne":
             for idx in range(N*N):
                 if previous_state[idx] == "E":
                     if previous_state.count("X") <= previous_state.count("O"):
@@ -56,7 +63,7 @@ states = []
 stateToIndex = {}
 for depth in range(N*N+1):
     for state in states_by_depth[depth]:
-        if state.count("O") >= state.count("X") or whoWon(state) != 'NoOne':
+        if state.count("O") >= state.count("X") or whoWon(state, N, M) != 'NoOne':
             states.append(state)
 print(len(states))
 for i in range(len(states)):
@@ -110,7 +117,7 @@ for each state in states:
 """
 for state in states:
     actions = []
-    if whoWon(state) == "NoOne":
+    if whoWon(state, N, M) == "NoOne":
         for idx in range(N*N):
             if state[idx] == "E":
                 actions.append({"action": strReplace(state, idx, "X")})
@@ -119,19 +126,19 @@ for state in states:
 
     for action in actions:
         action["results"] = []
-        if whoWon(state) == "NoOne" and whoWon(action["action"]) == "X": # computer caused a win
+        if whoWon(state, N, M) == "NoOne" and whoWon(action["action"], N, M) == "X": # computer caused a win
             action["results"].append({
                 "nextState": action["action"],
                 "probability": 1,
                 "reward": 1
             })
-        elif whoWon(state) == "NoOne" and whoWon(action["action"]) == "Tie": # computer caused a draw
+        elif whoWon(state, N, M) == "NoOne" and whoWon(action["action"], N, M) == "Tie": # computer caused a draw
             action["results"].append({
                 "nextState": action["action"],
                 "probability": 1,
                 "reward": 0
             })
-        elif whoWon(state) != "NoOne": # the game was already over
+        elif whoWon(state, N, M) != "NoOne": # the game was already over
             action["results"].append({
                 "nextState": action["action"],
                 "probability": 1,
@@ -143,7 +150,7 @@ for state in states:
                 if action["action"][idx] == "E":
                     possible_next_states.append(strReplace(action["action"], idx, "O"))
             for next_state in possible_next_states:
-                winner = whoWon(next_state)
+                winner = whoWon(next_state, N, M)
                 if winner == "O":
                     cur_reward = -1
                 elif winner == "Tie":
